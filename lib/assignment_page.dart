@@ -108,6 +108,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
           file.status.value = UploadStatus.success;
           timer.cancel();
           _uploadTimers.remove(file.id);
+          if (mounted) setState(() {});
           _checkAllComplete();
         } else {
           file.progress.value = next;
@@ -151,15 +152,17 @@ class _AssignmentPageState extends State<AssignmentPage> {
   }
 
   void _uploadAll() {
-    if (_files.isEmpty) {
+    final failedFiles = _files.where(
+      (f) => f.status.value == UploadStatus.failed,
+    );
+
+    if (failedFiles.isEmpty) {
       _pickFiles();
       return;
     }
-    for (final file in _files) {
-      final status = file.status.value;
-      if (status == UploadStatus.failed) {
-        _startUpload(file);
-      }
+
+    for (final file in failedFiles) {
+      _startUpload(file);
     }
   }
 
@@ -175,7 +178,7 @@ class _AssignmentPageState extends State<AssignmentPage> {
     showAppSnackbar(context, 'All files cleared', type: SnackbarType.info);
   }
 
-  void _submitAssignment() {
+  Future<void> _submitAssignment() async {
     if (_files.isEmpty) {
       showAppSnackbar(
         context,
@@ -207,7 +210,60 @@ class _AssignmentPageState extends State<AssignmentPage> {
       return;
     }
 
-    // All files uploaded — submit
+    // ── Real API call (uncomment when backend is ready) ──────────────
+    // try {
+    //   final uri = Uri.parse('https://your-api.com/api/assignments/submit');
+    //   final request = http.MultipartRequest('POST', uri);
+    //
+    //   // Add auth header
+    //   // request.headers['Authorization'] = 'Bearer $token';
+    //
+    //   // Attach each file
+    //   for (final file in _files) {
+    //     request.files.add(
+    //       await http.MultipartFile.fromPath('files', file.path),
+    //     );
+    //   }
+    //
+    //   final response = await request.send();
+    //
+    //   if (!mounted) return;
+    //
+    //   if (response.statusCode == 200) {
+    //     _cleanUpAndClear();
+    //     showAppSnackbar(
+    //       context,
+    //       'Assignment submitted successfully!',
+    //       type: SnackbarType.success,
+    //     );
+    //   } else {
+    //     showAppSnackbar(
+    //       context,
+    //       'Submission failed. Please try again.',
+    //       type: SnackbarType.error,
+    //     );
+    //   }
+    // } catch (e) {
+    //   if (mounted) {
+    //     showAppSnackbar(
+    //       context,
+    //       'Network error. Please check your connection.',
+    //       type: SnackbarType.error,
+    //     );
+    //   }
+    // }
+    // ─────────────────────────────────────────────────────────────────
+
+    // Testing: simulate successful submission
+    _cleanUpAndClear();
+    showAppSnackbar(
+      context,
+      'Assignment submitted successfully!',
+      type: SnackbarType.success,
+    );
+  }
+
+  void _cleanUpAndClear() {
     for (final timer in _uploadTimers.values) {
       timer.cancel();
     }
@@ -216,12 +272,6 @@ class _AssignmentPageState extends State<AssignmentPage> {
       file.dispose();
     }
     setState(() => _files.clear());
-
-    showAppSnackbar(
-      context,
-      'Assignment submitted successfully!',
-      type: SnackbarType.success,
-    );
   }
 
   // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━

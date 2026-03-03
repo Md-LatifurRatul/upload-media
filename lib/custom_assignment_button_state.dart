@@ -46,9 +46,6 @@ class CustomAssignmentButtonState extends StatelessWidget {
       ButtonState.hover => [_hoverStart, _hoverEnd],
     };
 
-    final Color textColor =
-        state == ButtonState.disabled ? Colors.white54 : Colors.white;
-
     return SizedBox(
       width: double.infinity,
       height: btnHeight,
@@ -67,10 +64,10 @@ class CustomAssignmentButtonState extends StatelessWidget {
             child: Center(
               child: Text(
                 text,
-                style: TextStyle(
+                style: const TextStyle(
                   fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: textColor,
+                  color: Colors.white,
                 ),
               ),
             ),
