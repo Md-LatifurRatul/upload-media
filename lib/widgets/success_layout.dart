@@ -3,6 +3,7 @@ import 'package:assignments/models/upload_file_model.dart';
 import 'package:assignments/widgets/action_icon_button.dart';
 import 'package:assignments/widgets/file_type_badge.dart';
 import 'package:flutter/material.dart';
+import 'package:open_file/open_file.dart';
 
 class SuccessLayout extends StatelessWidget {
   const SuccessLayout({super.key, required this.file, required this.onDelete});
@@ -39,7 +40,10 @@ class SuccessLayout extends StatelessWidget {
         ),
         const Icon(Icons.check_circle, color: AppColors.successGreen, size: 20),
         const SizedBox(width: 8),
-        ActionIconButton(icon: Icons.visibility_outlined, onPressed: () {}),
+        ActionIconButton(
+          icon: Icons.visibility_outlined,
+          onPressed: () => OpenFile.open(file.path),
+        ),
         const SizedBox(width: 4),
         ActionIconButton(icon: Icons.delete_outline, onPressed: onDelete),
       ],

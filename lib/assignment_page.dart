@@ -72,7 +72,12 @@ class _AssignmentPageState extends State<AssignmentPage> {
 
       final ext = picked.extension ?? '';
       validFiles.add(
-        UploadFileModel(name: picked.name, extension: ext, sizeInBytes: size),
+        UploadFileModel(
+          name: picked.name,
+          extension: ext,
+          sizeInBytes: size,
+          path: picked.path ?? '',
+        ),
       );
     }
 

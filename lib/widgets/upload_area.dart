@@ -35,7 +35,7 @@ class UploadArea extends StatelessWidget {
                   TextSpan(
                     children: [
                       TextSpan(
-                        text: 'Select file',
+                        text: 'Click here',
                         style: TextStyle(
                           color: AppColors.primaryBlue,
                           fontSize: 14,

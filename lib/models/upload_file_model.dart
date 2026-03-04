@@ -7,14 +7,16 @@ class UploadFileModel {
     required this.name,
     required this.extension,
     required this.sizeInBytes,
-  })  : id = DateTime.now().microsecondsSinceEpoch.toString(),
-        progress = ValueNotifier<double>(0),
-        status = ValueNotifier<UploadStatus>(UploadStatus.uploading);
+    required this.path,
+  }) : id = DateTime.now().microsecondsSinceEpoch.toString(),
+       progress = ValueNotifier<double>(0),
+       status = ValueNotifier<UploadStatus>(UploadStatus.uploading);
 
   final String id;
   final String name;
   final String extension;
   final int sizeInBytes;
+  final String path;
   final ValueNotifier<double> progress;
   final ValueNotifier<UploadStatus> status;
 
